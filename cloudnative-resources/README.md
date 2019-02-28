@@ -119,11 +119,54 @@ Sits in front of multiple services and routes requests
 * https://cloud.google.com/kubernetes-engine/docs/tutorials/http-balancer
 Uses nodeport for the service, then deploys load balancers to provide the ingress service
 
+## Security
+* https://koudingspawn.de/secure-kubernetes-with-vault/
 
 
 ## Projects
 ### Cloud Services Platform from Google
-A basic service in k8s is usually a dynamic set of pods behind a grouping mechanism that implements varous policies and maintains the service IP
+* http://services.google.com/fh/files/blogs/csp_white_paper.pdf
+
+A basic service in k8s is usually a dynamic set of pods behind a grouping mechanism that implements varous policies and maintains the service IP --> Microservice
+It must have a highly available persistent "name" such as a service IP address -- this decouples the service's name from its implementation allowing online upgrades, scaling, and policy
+
+Basic k8s services are stateless, they can be restarted back using the same specification
+
+Real goal is to decouple teams
+
+Using proxies to enable services allows for decoupling of policies from the service - very important decoupling - which in turn decouples development from operations
+
+"Granular telemetry, control plane automation, and technical/operational consistency of open cloud architectures allows ..."
+
+"More than ever, enterprises are rapidly embracing open software frameworks
+(Kubernetes, Istio, Knative) in their existing enterprise/IT environments. This
+architectural evolution enables portability of workloads, vendor-agnostic
+cloud service abstractions and centralized administration of policies across
+heterogeneous environments, improving security/cost governance and
+dramatically simplifying future cloud migrations."
+
+"Bringing it all together, the YAML file is the intended state, and it is managed using a
+RESTful interface to the apiserver (as shown below). The apiserver can be driven by
+different forms of UI, or by other tools, and it stores the desired state in a durable
+key/value store (currently based on etcd). Controllers watch for changes in the
+desired state and then take action accordingly." - this works well with git since we can manage the yaml files as a repo
+
+"We covered several
+forms of decoupling:
+• Containers to decouple applications and libraries from the underlying OS and
+machine.
+• Basic services in Kubernetes that decouple services from pods, allowing each
+to evolve independently
+• Istio proxies to provide capabilities, including security and telemetry, across
+all services in a uniform way that is decoupled from each services’ source code.
+• Proxy-enabled policy deployment and enforcement decouples the
+management of policies from specific services so that policies can evolve
+without service disruption and security posture can be improved without
+infrastructure changes (via policy as code)
+• The use of services as the unit of deployment that often correspond to
+specific teams, allowing teams to operate more independently. Although this
+may result in hundreds of services for a large-scale application, the Kubernetes
+and Istio service infrastructure makes it simple to manage."
 
 ### K3S
 https://github.com/rancher/k3s
