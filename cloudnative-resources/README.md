@@ -122,6 +122,9 @@ Uses nodeport for the service, then deploys load balancers to provide the ingres
 
 
 ## Projects
+### Cloud Services Platform from Google
+A basic service in k8s is usually a dynamic set of pods behind a grouping mechanism that implements varous policies and maintains the service IP
+
 ### K3S
 https://github.com/rancher/k3s
 
@@ -139,6 +142,27 @@ https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/aks/configure-a
 # Istio 
 ## Crash course
 - https://medium.com/namely-labs/a-crash-course-for-running-istio-1c6125930715
+Istio takes advantage of the mutating webhook configuration to modify pods as they are created.  The pods are modified to add an init container for setting up iptables rules to send traffic to the envoy proxy, as well as inserting the envoy proxy sidecar pod itself.
+
+k8s uses a service to handle networking and a service manages a type called endpoint.
+
+A service has match labels to choose which pods to use to handle the request, and provides a virtual IP.
+Traffic will hit VIP and then be forwarded to the pod.
+
+Istio behaves differently.  Istio configures envoy based on services and endpoints, bypasssing the k8s service.  Instead of proxying a single IP, envoy knows and connects to pod IPs.  Istio maps k8s config to envoy config to make this possible.
+
+Service in k8s = cluster in envoy
+Envoy cluster has list of endpoints which are IPs to handle requests
+Istio configures protocols for service manifests by reading name field in port entries
+**i.e. you need to name your ports with grpc, http, prefixes**
+
+Listeners incorporate k8s endpoints to allow traffic into pods, such as addressvalidator
+
+Istio does not use Ingress, instead usues custom resource called *VirtualService* that allows you to match routes to upstream clusters by attaching them to a gateway.  Similar to Ingress + Ingress Controller
+
+How do you install Istio?
+We use Spinnaker for our deployments, but in general the process entails pulling down the latest Helm charts, making our in-house modifications, using helm template -f values.yml and committing those files to Github to compare changes before we apply them via kubectl apply -f -. We take this approach in order to confirm there are no CRD or API changes across versions we may not have accounted for.
+
 
 # Network automation
 ## OpenConfig
