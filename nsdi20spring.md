@@ -1,4 +1,5 @@
 # Meaningful Availability
+[https://www.usenix.org/system/files/nsdi20spring_hauer_prepub.pdf](nsdi20spring)
 # Abstract
 ## Windowed User-uptime
 * Directly models user-perceived availability and avoids bias in commonly used availability metrics
